@@ -1,0 +1,61 @@
+/*---------------------
+CONTENT CSS START
+---------------------*/
+.content-container {
+  display: flex;
+  flex-direction: row;
+  border-left: 1px solid #7e7e7e;
+  border-right: 1px solid #7e7e7e;
+  border-bottom: 1px solid #7e7e7e;
+}
+
+//--Left Navigation Panel CSS
+.content-nav {
+  flex: 0 0 12em;
+  background: #d9d9d9;
+  order: -1;
+}
+
+.content-nav ul {
+  list-style-type: none;
+  margin:0; padding:0;
+}
+.content-nav li {
+    border-bottom: 1px solid #7e7e7e;
+}
+.content-nav li:nth-child(1) {
+  border-top: 1px solid #7e7e7e;
+}
+.content-nav li:last-child {
+  margin-bottom: 10px;
+}
+.content-nav li a {
+  display: inline-block;
+  width: 100%;
+  padding: 5px;
+}
+.content-nav li a:hover {
+  background-color: #737374;
+  color: white;
+}
+
+//--Right Content Body CSS
+.content-body {
+  border-left: 1px solid #7e7e7e;
+  padding: 5px 10px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.content-right {
+  display: none;
+  flex: 0 0 12em;
+  border-radius: 3px;
+  background: rgba(147, 128, 108, 0.1);
+}
+
+
+
+/*---------------------
+CONTENT CSS END
+---------------------*/

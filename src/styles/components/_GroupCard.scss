@@ -1,0 +1,111 @@
+/*---------------------
+Group Card CSS START
+---------------------*/
+
+.gc-container {
+	display: flex;
+	border: 1px solid black;
+	border-radius: $border-radius;
+	margin: 15px;
+	flex-direction: column;
+  height: auto;
+	width: 350px;
+	position: relative;
+}
+
+.gc-title {
+	border-bottom: 1px solid black;
+	text-align: center;
+	background: #f9f9f9;
+	border-top-left-radius: $border-radius;
+	border-top-right-radius: $border-radius;
+}
+
+.gc-title a {
+	display: inline-block;
+	width: 100%;
+	padding: 5px;
+}
+
+.gc-description {
+	padding: 5px;
+	height:auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.gc-fields {
+	padding: 5px;
+
+}
+/*START Drag-Drop List CSS */
+.sortable-list {
+  margin: 5px;
+	border: 1px solid #909090;
+  cursor: pointer;
+}
+
+.sortable-field-container {
+	display:flex;
+	flex-direction: row;
+	margin: 5px 5px 5px 0;
+}
+.sortable-field-values-container {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #909090;
+	flex-grow: 1;
+}
+.sortable-item {
+  padding: 10px;
+	background-color: white;
+	font-size: 1em;
+}
+.sortable-item:first-child {
+	border-bottom: 1px solid #909090;
+}
+.sortable-item a {
+	padding: 0 5px;
+}
+.sortable-item input {
+	margin: 0;
+}
+.sortable-handle {
+  	display: inline-block;
+    width: 25px;
+    height: auto;
+		padding: 0 40px;
+    background: #a2a2a2 url("/images/3dots.png") no-repeat center;
+    opacity: .5;
+    cursor: row-resize;
+		border-right: 1px solid black;
+		border-bottom: 1px solid black;
+		border-top: 1px solid black;
+}
+/*END Drag-Drop List CSS */
+
+/*START Hover buttons CSS */
+.hover-buttons {
+  position: absolute;
+  padding: 5px 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 50%;
+  opacity: 0;
+  cursor: pointer;
+}
+.close {
+  top: -15px;
+  right: -10px;
+}
+.edit {
+  top: -15px;
+  left: -10px ;
+}
+.gc-container:hover .hover-buttons {
+  opacity: 1;
+}
+.hover-buttons:hover {
+  background-color: #e87373;
+}
