@@ -1,63 +1,116 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Select } from 'antd';
+const Option = Select.Option;
 
 class FieldItem extends React.Component {
   state = {
     editing: false,
-    fieldLabel: this.props.fieldLabel
+    fieldValue: this.props.fieldValue,
+		availableAnalytixFields: this.props.showSelectedValues ? this.props.analytixFields : []
   }
 
 	cancelEditing = () => {
 		this.setState({
 			editing: false,
-			fieldLabel: ''
+			fieldValue: ''
 		});
 	}
 	componentDidUpdate() {
-		//if editing and state and passed field label are equal
-		//select the text in the input box
-		if(this.state.editing && this.state.fieldLabel === this.props.fieldLabel) {
-			let inputElem = this.state.fieldLabel;
-			document.getElementById(inputElem).select();
+		//if editing and we are not allowing them to select values from list and (state and passed field value) are equal
+		//Give the input element focus
+		if(this.state.editing && !this.props.showSelectedValues && this.state.fieldValue === this.props.fieldValue) {
+			//I have assign the fieldValue as the html id attribute on the input element
+			let inputElem = this.props.fieldValue;
+			//Give this element focus. Then the onFocus event actually selects the text
+			document.getElementById(inputElem).focus();
 		}
 	}
-  componentWillReceiveProps(nextProps) {
-    //Having an issue with state of fieldlabel not updating correctly when
-    //dragging and dropping to new order.  Below may break when actually updating
-    //fieldLabel in edit mode, but may not since we will be updating redux store at same time.
-    if (this.state.editing && this.props.fieldLabel !== nextProps.fieldLabel) {
-      this.setState({fieldLabel: nextProps.fieldLabel});
-    }
-  }
+//calls the passed in onSave function with the state fieldValue as an argument
+//then set editing state to false
+	handleSave = () => {
+		this.props.onSave(this.state.fieldValue);
+		this.setState({ editing: false });
+	}
+
+	handleFieldSearch = value => {
+		const re = new RegExp(value, "gi")
+		this.setState({
+			fieldValue: value,
+			availableAnalytixFields: this.props.analytixFields.filter(aField => aField.field.match(re))
+		});
+	}
   render() {
-    let fieldJSX = <div
-          className="sortable-item"
-          onClick={() => this.setState({ editing: true, fieldLabel: this.props.fieldLabel })}
+		let fieldJSX =
+				<div
+          className={this.props.customClass}
+					style={{cursor: "pointer"}}
+          onClick={() => this.setState({ editing: true, fieldValue: this.props.fieldValue })}
         >
-          {this.props.fieldLabel}
+          {this.props.fieldValue}
         </div>;
     if (this.state.editing) {
-      fieldJSX = <div className="sortable-item">
-        <input
-					id={this.state.fieldLabel}
-          type="text"
-          value={this.state.fieldLabel}
-          onChange={(e) => this.setState({ fieldLabel: e.target.value })}
-          onBlur={this.cancelEditing}
-        />
-      <a
-        onClick={() => {
-            console.log('onsave');
-            this.props.onSaveLabel(this.props.fieldIndex, this.state.fieldLabel);
-            this.setState({ editing: false });
-          }
-        }
-      >Save</a>
-				<a onClick={this.cancelEditing}>
-					Cancel
-				</a>
-      </div>
-    }
+			if (this.props.showSelectedValues) {
+				//--------------------------------------------
+				//--Search analytixFields list
+				const options = this.state.availableAnalytixFields.map(aField => <Option key={aField.field} >{aField.field}</Option>);
+	      fieldJSX = <div className={this.props.customClass}>
+					<Select
+		        mode="combobox"
+						id={this.props.fieldValue}
+		        value={this.state.fieldValue}
+						style= {{width: "200px"}}
+		        notFoundContent=""
+		        defaultActiveFirstOption={false}
+		        showArrow={false}
+		        filterOption={true}
+						onBlur={() => this.cancelEditing()}
+						dropdownMatchSelectWidth={false}
+		        onChange={this.handleFieldSearch}
+		      >
+		        {options}
+		      </Select>
+		      <a
+		        onMouseDown={() => {
+								this.handleSave();
+		          }
+						}
+		      >Save</a>
+					<a onClick={this.cancelEditing}>
+						Cancel
+					</a>
+	      </div>
+	    } else {
+				//--------------------------------------------
+				//--Does not want to search analytixFields list
+				fieldJSX = <div className={this.props.customClass}>
+					<input
+						id={this.props.fieldValue}
+						type="text"
+						value={this.state.fieldValue}
+						onFocus={() => document.getElementById(this.props.fieldValue).select()}
+						onChange={(e) => this.setState({ fieldValue: e.target.value })}
+						onBlur={this.cancelEditing}
+						onKeyPress={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								this.handleSave();
+							}
+						}}
+					/>
+					<a
+						onMouseDown={() => {
+								this.handleSave();
+							}
+						}
+					>Save</a>
+					<a onClick={this.cancelEditing}>
+						Cancel
+					</a>
+				</div>
+			}
+		}
     return (
       <div> {fieldJSX}</div>
     )
@@ -66,9 +119,12 @@ class FieldItem extends React.Component {
 }
 
 FieldItem.Proptypes = {
-  fieldLabel: PropTypes.string,
-  fieldIndex: PropTypes.number,
-  onSaveLabel: PropTypes.func
+  fieldValue: PropTypes.string,
+	showSelectedValues: PropTypes.bool,  //If true we will show the analytixFields as select options
+	customClass: PropTypes.string,
+  onSave: PropTypes.func
 };
 
-export default FieldItem;
+export default connect(state => (
+	{analytixFields: _.uniqBy(state.fields, 'field')}
+))(FieldItem);

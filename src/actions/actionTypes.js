@@ -13,3 +13,5 @@ export const LOAD_APPLICATION_GROUPS = 'LOAD_APPLICATION_GROUPS';
 export const LOAD_APPLICATION_GROUP_FIELDS = 'LOAD_APPLICATION_GROUP_FIELDS';
 //whenever a change in the fields of a group happens all fields are updated.
 export const UPDATE_GROUP_FIELDS = 'UPDATE_GROUP_FIELDS';
+//whenever a change in the a group happens update the whole group in redux store.
+export const UPDATE_GROUP = 'UPDATE_GROUP';

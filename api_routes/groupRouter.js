@@ -68,10 +68,11 @@ groupRouter.route('/groups')
     fs.readFile(GROUPS_FILE, (err, data) => {
       const groups = JSON.parse(data);
       //Find the variable to be updated
+
       groups.forEach(qvGroup => {
       	if (qvGroup.id === req.body.id) {
   				qvGroup.application = req.body.application;
-  				qvGroup.name = req.body.groupName;
+  				qvGroup.groupName = req.body.groupName;
   				qvGroup.groupField = req.body.groupField;
   				qvGroup.groupLabel = req.body.groupLabel;
   				qvGroup.notes = req.body.notes;
@@ -92,7 +93,7 @@ groupRouter.route('/groups')
 
   groupRouter.route('/groups/:id')
     //---------------------------------------------------
-    //--A get to api/groups/:id will return the matching 
+    //--A get to api/groups/:id will return the matching
     // group from the qvgroups.json file as a javascript object.
     //---------------------------------------------------
     .get((req, res) => {
@@ -101,10 +102,10 @@ groupRouter.route('/groups')
         let returnGroup = groups.filter(group => group.id === req.params.id)
         res.setHeader('Cache-Control', 'no-cache');
         res.json(returnGroup);
-      }); 
+      });
     })
     //---------------------------------------------------
-    //--A delete to api/groups/:id will delete the matching 
+    //--A delete to api/groups/:id will delete the matching
     // group from the qvgroups.json file
     //---------------------------------------------------
     .delete((req, res) => {

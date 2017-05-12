@@ -69,15 +69,23 @@ export const getGroupFieldData = appName => {
 		});
 }
 
+//--Update the fields of the groupId passed
 export const updateGroupFieldData = (groupId, fieldsArray) => {
 	return axios.put(`/api/groups/${groupId}/fields`, {fields: fieldsArray} )
 		.then(response => {
 			console.log(response);
-
+			return response.status; //expect 200 for success
 		});
 };
 
-
+//--Update the group based on groupObj.id
+export const updateGroup = groupObj => {
+	return axios.put(`/api/groups/`, groupObj)
+		.then(response => {
+			console.log(response);
+			return response.status; //expect 200 for success
+		})
+};
 //returns an object containing the fields for the passed appName
 export const getAnalytixFields = appName => {
 	return axios.get(`/api/analytixfields/${appName}`)

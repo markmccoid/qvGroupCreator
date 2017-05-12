@@ -6,7 +6,8 @@ import _ from 'lodash';
 import { startLoadGroups,
 				 startLoadGroupFields,
 				 startLoadAnalytixFields,
-				 startUpdateGroupFields
+				 startUpdateGroupFields,
+				 startUpdateGroup
 			 } from '../actions';
 
 import GroupsDisplay from './GroupsDisplay';
@@ -24,14 +25,15 @@ class GroupCreator extends React.Component {
 			this.props.startLoadGroupFields(nextProps.selectedApplication);
 			this.props.startLoadAnalytixFields(nextProps.selectedApplication);
 		}
-		console.log('groupCreator-groupFields', nextProps.groupFields);
 	}
 	render() {
 			return (
 				<GroupsDisplay
 					groups={this.props.groups}
 					groupFields={this.props.groupFields}
+					analytixFields={this.props.analytixFields}
 					onUpdateGroupFields={this.props.startUpdateGroupFields}
+					onUpdateGroup={this.props.startUpdateGroup}
 				/>
 
 		);
@@ -55,5 +57,6 @@ export default connect(mapStateToProps, {
 	startLoadGroups: startLoadGroups,
 	startLoadGroupFields: startLoadGroupFields,
 	startLoadAnalytixFields: startLoadAnalytixFields,
-	startUpdateGroupFields: startUpdateGroupFields
+	startUpdateGroupFields: startUpdateGroupFields,
+	startUpdateGroup: startUpdateGroup
 })(GroupCreator);

@@ -15,12 +15,14 @@ class GroupsDisplay extends React.Component {
 					this.props.groups.map(group => {
 						//Get the fields for the group we are working on
 						//The fields are in an object where the keys are the group ids
-						let fields = this.props.groupFields[group.id] || [];
+						let groupFields = this.props.groupFields[group.id] || [];
 						return (
 								<GroupCard key={group.id}
 									group={group}
-									fields={fields}
+									fields={groupFields}
+									analytixFields={this.props.analytixFields}
 									onUpdateGroupFields={this.props.onUpdateGroupFields}
+									onUpdateGroup={this.props.onUpdateGroup}
 								/>
 						);
 					})
@@ -33,7 +35,8 @@ class GroupsDisplay extends React.Component {
 //#--PropTypes---###//
 GroupsDisplay.propTypes = {
 	groups: PropTypes.array,
-	groupFields: PropTypes.object
+	groupFields: PropTypes.object,
+	analytixFields: PropTypes.array
 }
 
 export default GroupsDisplay;
