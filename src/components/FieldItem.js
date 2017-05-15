@@ -66,6 +66,13 @@ class FieldItem extends React.Component {
 		        showArrow={false}
 		        filterOption={true}
 						onBlur={() => this.cancelEditing()}
+						onKeyPress={(e) => {
+							console.log('keypress', e);
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								this.handleSave();
+							}}
+						}
 						dropdownMatchSelectWidth={false}
 		        onChange={this.handleFieldSearch}
 		      >
@@ -126,5 +133,5 @@ FieldItem.Proptypes = {
 };
 
 export default connect(state => (
-	{analytixFields: _.uniqBy(state.fields, 'field')}
+	{analytixFields: _.uniqBy(state.applications.selectedApplicationFields, 'field')}
 ))(FieldItem);

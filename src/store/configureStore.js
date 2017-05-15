@@ -9,12 +9,11 @@ import freeze from 'redux-freeze';
 
 //Setup the initil redux state
 const INITIAL_STATE = {
-			applications: [],
+			applications: {},
 			groups: {
 					groupsInfo: [],
 					groupFields: {}
-				},
-			fields: []
+				}
 		};
 //--------------------------------------------
 //-Create Store - This is called from app.js
@@ -26,8 +25,7 @@ export var configure = (initialState = INITIAL_STATE) => {
 				groups: combineReducers({
 					groupsInfo: groupsReducer,
 					groupFields: groupFieldsReducer
-				}),
-				fields: fieldsReducer
+				})
 		});
 	//Create the store that will be returned.
 		var store = createStore(reducer, initialState, compose(applyMiddleware(thunk, freeze),

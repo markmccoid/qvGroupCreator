@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
-import {
-				 LOAD_APPLICATION_GROUPS,
+import { LOAD_APPLICATION_GROUPS,
 			 	 UPDATE_GROUP } from '../actions';
 
 export const groupsReducer = (state = [], action) => {
@@ -9,9 +8,8 @@ export const groupsReducer = (state = [], action) => {
 		case LOAD_APPLICATION_GROUPS:
 			return (action.groupsArray);
 		case UPDATE_GROUP:
-		console.log(action);
 			let objIndex = _.findIndex(state, {'id': action.groupObj.id});
-			//slice in the updated group 
+			//slice in the updated group
 			return [..._.slice(state, 0, objIndex),
 							action.groupObj,
 							..._.slice(state, objIndex+1)];
