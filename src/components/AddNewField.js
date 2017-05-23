@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import FieldItem from './FieldItem';
 import { confirmDialog } from '../helpers';
@@ -14,8 +15,8 @@ class AddNewField extends React.Component {
 		this.props.onNewGroupField(this.state.fieldLabel, this.state.fieldName);
 		this.setState(
 			{ isAdding: false,
-				fieldLabel: '',
-				fieldName: ''
+				fieldLabel: 'Field Label',
+				fieldName: 'Field Name'
 			});
 	}
 	cancelEditing = () => {
@@ -23,8 +24,16 @@ class AddNewField extends React.Component {
 		//May want to clear label and name.
 		this.setState({ isAdding: false });
 	}
+	componentWillUnmount() {
+		console.log('FieldItem Unmount', this.state.fieldLabel);
+	}
 	render() {
-		let stateJSX = <a onClick={() => this.setState({ isAdding: true })}>Add Field</a>;
+		let stateJSX = <div className="gc-adding-field init">
+											<a
+												onClick={() => this.setState({ isAdding: true })}
+												className="button primary medium"
+											>Add Field</a>
+									 </div>;
 		if (this.state.isAdding) {
 			stateJSX = <div className="gc-adding-field">
 								<FieldItem
@@ -35,12 +44,16 @@ class AddNewField extends React.Component {
 								<FieldItem
 									fieldValue={this.state.fieldName}
 									customClass="sortable-item"
-									showSelectedValues
+									showSearchList
+									searchList={this.props.analytixFields}
 									onSave={newFieldName => this.setState({ fieldName: newFieldName })}
 								/>
 
-								<a onMouseDown={() => {
-											this.handleSave();
+							<a onMouseDown={(e) => {
+									//Only save if left mouse button pressed.
+											if (e.nativeEvent.which === 1){
+												this.handleSave();
+											}
 										}
 									}
 								>Save</a>
@@ -60,6 +73,7 @@ class AddNewField extends React.Component {
 }
 
 AddNewField.propTypes = {
-	onNewGroupField: PropTypes.func
+	onNewGroupField: PropTypes.func,
+	analytixFields: PropTypes.array
 }
 export default AddNewField;

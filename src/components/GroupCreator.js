@@ -27,11 +27,20 @@ class GroupCreator extends React.Component {
 		}
 	}
 	render() {
+		//Prep analytix fields for use in the FieldItem component
+		let isAnaltixFieldsAvaliable = false;
+		if (this.props.analytixFields) { isAnaltixFieldsAvaliable = true }
+		let analytixFieldsFormatted =  isAnaltixFieldsAvaliable ? this.props.analytixFields.map(field => {
+			return {
+				key: field.field,
+				label: field.field
+			};
+		}) : [];
 			return (
 				<GroupsDisplay
 					groups={this.props.groups}
 					groupFields={this.props.groupFields}
-					analytixFields={this.props.analytixFields}
+					analytixFields={analytixFieldsFormatted}
 					onUpdateGroupFields={this.props.startUpdateGroupFields}
 					onUpdateGroup={this.props.startUpdateGroup}
 				/>
@@ -44,7 +53,7 @@ const mapStateToProps = (state) => {
 	return {
 		groups: state.groups.groupsInfo,
 		groupFields: state.groups.groupFields,
-		analytixFields: state.fields
+		analytixFields: state.applications.selectedApplicationFields
 	}
 }
 

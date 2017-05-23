@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import Main from './components/Main';
 
@@ -26,7 +27,9 @@ var store = require('./store/configureStore').configure();
 //path="/" designates the root of the application
 ReactDOM.render(
 	<Provider store={store}>
-		<Main />
+		<Router>
+			<Main />
+		</Router>
 	</Provider>,
   document.getElementById('app')
 );

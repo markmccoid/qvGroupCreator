@@ -23,20 +23,11 @@ Group Card CSS START
 	border-top-right-radius: $border-radius;
 }
 
-.gc-title a {
-	font-size: 1em;
-	font-weight: normal;
-	padding: 0 10px;
-}
 
-.gc-title input {
-	margin: 0;
-	font-size: 1.1em;
-}
 
-.gc-description {
+.gc-detail-container {
 	padding: 5px;
-	height:auto;
+	height: auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -48,11 +39,54 @@ Group Card CSS START
 
 .gc-adding-field {
 	border: 1px solid #909090;
+	margin: 5px 5px;
 }
 .gc-adding-field a {
-	padding: 0 5px;
+	padding: 2px 5px;
+	height: 100%;
+}
+//Needed to add .init class because initial Add Field button has
+//different properties than save/cancel buttons when adding a field
+.gc-adding-field.init a {
+	display: block;
+	width: 100%;
+	margin: 0;
+	text-align: center;
+}
+.gc-adding-field a:hover {
+	background-color: #b9b9b9;
 }
 
+.gc-detail-child {
+	display: flex;
+	margin: 5px 5px;
+	border: 1px solid #909090;
+}
+.gc-detail-label {
+	font-size: 1.2em;
+	display: inline-block;
+	padding: 0 5px;
+	background: beige;
+	border-right: 1px solid #909090;
+}
+.gc-detail-value {
+	font-size: 1.1em;
+	padding: 5px 5px;
+	background-color: white;
+	width: 100%;
+}
+.field-item-js input {
+	margin: 0;
+	font-size: 1.1em;
+}
+.field-item-js a {
+	font-size: 1em;
+	font-weight: normal;
+	padding: 3px 5px;
+}
+.field-item-js a:hover {
+	background-color: #b9b9b9;
+}
 /*START Drag-Drop List CSS */
 .sortable-list {
   margin: 5px;
@@ -80,7 +114,7 @@ Group Card CSS START
 	border-bottom: 1px solid #909090;
 }
 .sortable-item a {
-	padding: 0 5px;
+	padding: 3px 5px;
 }
 .sortable-item input {
 	margin: 0;

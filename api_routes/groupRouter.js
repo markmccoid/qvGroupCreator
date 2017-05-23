@@ -11,6 +11,7 @@ groupRouter.route('/groups')
   //--file as a javascript object.
   //---------------------------------------------------
   .get((req, res) => {
+		console.log('in get');
     fs.readFile(GROUPS_FILE, (err, data) => {
       res.setHeader('Cache-Control', 'no-cache');
       res.json(JSON.parse(data));
@@ -31,10 +32,9 @@ groupRouter.route('/groups')
         id: uuid.v4(),
         application: req.body.application,
         groupName: req.body.groupName,
-        groupField: req.body.groupField,
-        groupLabel: req.body.groupLabel,
-        notes: req.body.notes || '',
-        groupOrder: req.body.groupOrder,
+        groupType: req.body.groupType,
+        groupNotes: req.body.groupNotes || '',
+				fields: req.body.fields,
         createDate: req.body.createDate,
         modifyDate: '',
         createUser: req.body.createUser,
@@ -68,15 +68,13 @@ groupRouter.route('/groups')
     fs.readFile(GROUPS_FILE, (err, data) => {
       const groups = JSON.parse(data);
       //Find the variable to be updated
-
       groups.forEach(qvGroup => {
       	if (qvGroup.id === req.body.id) {
   				qvGroup.application = req.body.application;
   				qvGroup.groupName = req.body.groupName;
-  				qvGroup.groupField = req.body.groupField;
-  				qvGroup.groupLabel = req.body.groupLabel;
-  				qvGroup.notes = req.body.notes;
-  				qvGroup.groupOrder = req.body.groupOrder;
+					qvGroup.groupType = req.body.groupType;
+					qvGroup.fields = req.body.fields;
+  				qvGroup.groupNotes = req.body.groupNotes;
   				qvGroup.modifyDate = req.body.modifyDate,
           qvGroup.modifyUser = req.body.modifyUser;
       	}

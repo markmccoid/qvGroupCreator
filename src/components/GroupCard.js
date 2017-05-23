@@ -3,80 +3,11 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
 
-import { SortableContainer,
-				 SortableElement,
-				 SortableHandle,
-				 arrayMove } from 'react-sortable-hoc';
+import { arrayMove } from 'react-sortable-hoc';
 
 import FieldItem from './FieldItem';
 import AddNewField from './AddNewField';
-
-//Create the reac-sortable-hoc Components
-const DragHandle = SortableHandle((props) => {
-	return (
-		<div className="sortable-handle">
-			<div>Label</div>
-			<div>Field</div>
-			<div className="sort-delete"
-				onMouseDown={props.onDeleteField}>
-				<img src="images/close-x.png" width="10" height="10" />
-			</div>
-		</div>
-	);
-});
-
-const SortableItem = SortableElement((props) => {
-	//calls passed onSaveLabel function passing in
-	//required field index so we update the right label
-		const handleSaveFields = (newLabel = props.value.fieldLabel, newName = props.value.fieldName) => {
-			props.onGroupFieldUpdate(props.fieldIndex, newLabel, newName);
-		}
-		const handleDeleteField = () => {
-			//when called this will update the field associated with this index.
-			props.onGroupFieldUpdate(props.fieldIndex, '', '', true);
-		}
-		return (
-			<div className="sortable-field-container">
-				<DragHandle onDeleteField={handleDeleteField}/>
-				<div className="sortable-field-values-container">
-
-					<FieldItem
-						fieldValue={props.value.fieldLabel}
-						customClass="sortable-item"
-						onSave={newFieldLabel => handleSaveFields(newFieldLabel, props.value.fieldName)}
-					/>
-					<FieldItem
-						fieldValue={props.value.fieldName}
-						customClass="sortable-item"
-						showSelectedValues
-						onSave={newFieldName => handleSaveFields(props.value.fieldLabel, newFieldName)}
-					/>
-
-				</div>
-			</div>
-		)
-	}
-);
-
-const SortableList = SortableContainer(({ items, onGroupFieldUpdate }) => {
-
-	return (
-		<div className="sortable-list">
-			{items.map((value, idx) => {
-					return (
-						<SortableItem key={`item-${idx}`}
-							index={idx}
-							value={value}
-							fieldIndex={idx}
-							onGroupFieldUpdate={onGroupFieldUpdate}
-						/>
-					);
-				})
-			}
-		</div>
-	);
-});
-
+import GroupCardFields from './GroupCardFields';
 
 //GROUPCARD Component
 class GroupCard extends React.Component {
@@ -121,17 +52,24 @@ class GroupCard extends React.Component {
 		//dispatch action to update fields for group in redux store and on server.
 		this.props.onUpdateGroupFields(this.props.group.id, newFields);
 	}
-	handleGroupNameUpdate = (newGroupName) => {
+	groupValueUpdateFactory = groupKey => newGroupValue => {
 		//We can either create a new server REST Put call to change a single group title OR
 		//Send over the whole group and send a put to /api/groups
 		//Chose to send whole group object
+		//groupKey passed in first function will be the value of the groupKey:
+		// either -- groupName, groupType, groupNotes
 		let newGroup = {...this.props.group};
-		newGroup.groupName = newGroupName;
+		newGroup[groupKey] = newGroupValue;
 		newGroup.modifyDate = moment().unix();
 		newGroup.fields = this.props.fields;
 		//Call redux action to update the group on the server and redux store
 		this.props.onUpdateGroup(newGroup);
 	}
+	//create update functions for different group fields using the factory function.
+	handleGroupNameUpdate = this.groupValueUpdateFactory('groupName');
+	handleGroupTypeUpdate = this.groupValueUpdateFactory('groupType');
+	handleGroupNotesUpdate = this.groupValueUpdateFactory('groupNotes');
+
 	render() {
 		let { groupName, groupType, groupNotes } = this.props.group;
 	  //create a copy of the fields being passed and sort by their fieldOrder property
@@ -162,6 +100,7 @@ class GroupCard extends React.Component {
 		return (
 			<div className="gc-container" key={this.props.group.id}>
 				<div className="gc-title">
+
 					<FieldItem
 						fieldValue={groupName}
 						customClass="gc-title"
@@ -169,21 +108,39 @@ class GroupCard extends React.Component {
 					/>
 				</div>
 
-				<div className="gc-description">
-					<div style={{display: "flex"}}>
-						<h6>Group Type: </h6>
-						<h6 style={{padding: "0 10px"}}>{groupType}</h6>
+				<div className="gc-detail-container">
+					<div className="gc-detail-type gc-detail-child" style={{display: "flex"}}>
+						<div className="gc-detail-label">Type: </div>
+						<div className="gc-detail-value">
+							<FieldItem
+								fieldValue={groupType}
+								customClass="gc-detail-value"
+								showPickList
+								pickListValues={[{key: 'Cyclic', label: 'Cyclic'}, {key: 'Drill', label: 'Drill'}]}
+								onSave={(newGroupType) => this.handleGroupTypeUpdate(newGroupType)}
+							/>
+						</div>
 					</div>
 
-					<SortableList
+					<GroupCardFields
 						items={newFields}
+						analytixFields={this.props.analytixFields}
 						onSortEnd={onSortEnd}
 						onGroupFieldUpdate={this.handleGroupFieldUpdate}
-						useDragHandle={true} />
-					<AddNewField
 						onNewGroupField={this.handleNewGroupField}
+						useDragHandle
 					/>
 
+				<div className="gc-detail-notes gc-detail-child" style={{display: "flex"}}>
+						<div className="gc-detail-label">Desc: </div>
+						<div className="gc-detail-value">
+							<FieldItem
+								fieldValue={groupNotes}
+								customClass="gc-detail-value"
+								useTextArea
+								onSave={(newGroupNotes) => this.handleGroupNotesUpdate(newGroupNotes)}
+							/></div>
+					</div>
 				</div>
 
 				<div

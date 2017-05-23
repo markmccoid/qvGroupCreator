@@ -1,81 +1,97 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Select } from 'antd';
 const Option = Select.Option;
+
+const CustomInput = (props) => {
+	if (props.useTextArea) {
+		return (
+			<textarea
+				{...props}
+				/>
+		);
+	} else {
+		return (
+			<input
+				{...props}
+			/>
+		);
+	}
+};
 
 class FieldItem extends React.Component {
   state = {
     editing: false,
     fieldValue: this.props.fieldValue,
-		availableAnalytixFields: this.props.showSelectedValues ? this.props.analytixFields : []
+		availablepickListValues: this.props.showPickList ? this.props.pickListValues : []
   }
 
 	cancelEditing = () => {
 		this.setState({
 			editing: false,
-			fieldValue: ''
+			fieldValue: '',
+			availablepickListValues: this.props.showPickList ? this.props.pickListValues : []
 		});
 	}
 	componentDidUpdate() {
 		//if editing and we are not allowing them to select values from list and (state and passed field value) are equal
 		//Give the input element focus
-		if(this.state.editing && !this.props.showSelectedValues && this.state.fieldValue === this.props.fieldValue) {
+		if(this.state.editing && !this.props.showPickList && this.state.fieldValue === this.props.fieldValue) {
 			//I have assign the fieldValue as the html id attribute on the input element
 			let inputElem = this.props.fieldValue;
 			//Give this element focus. Then the onFocus event actually selects the text
 			document.getElementById(inputElem).focus();
 		}
 	}
+
 //calls the passed in onSave function with the state fieldValue as an argument
 //then set editing state to false
 	handleSave = () => {
 		this.props.onSave(this.state.fieldValue);
-		this.setState({ editing: false });
+		this.setState({ editing: false, availablepickListValues: this.props.showPickList ? this.props.pickListValues : [] });
 	}
 
 	handleFieldSearch = value => {
+		//Take the value typed and search the "label" key in the pickListValues object prop
 		const re = new RegExp(value, "gi")
 		this.setState({
-			fieldValue: value,
-			availableAnalytixFields: this.props.analytixFields.filter(aField => aField.field.match(re))
+			availablepickListValues: this.props.pickListValues.filter(aField => aField.label.match(re))
 		});
 	}
+
   render() {
+
+		let fieldClass = this.props.customClass + " field-item-js";
+		let selectMode = this.props.allowPickListSearch ? "combobox" : "";
+
 		let fieldJSX =
 				<div
-          className={this.props.customClass}
+          className={fieldClass}
 					style={{cursor: "pointer"}}
           onClick={() => this.setState({ editing: true, fieldValue: this.props.fieldValue })}
         >
           {this.props.fieldValue}
         </div>;
     if (this.state.editing) {
-			if (this.props.showSelectedValues) {
+			if (this.props.showPickList) {
 				//--------------------------------------------
-				//--Search analytixFields list
-				const options = this.state.availableAnalytixFields.map(aField => <Option key={aField.field} >{aField.field}</Option>);
-	      fieldJSX = <div className={this.props.customClass}>
+				//--Search pickListValues list
+				const options = this.state.availablepickListValues.map(aField => <Option key={aField.key} value={aField.key} >{aField.label}</Option>);
+	      fieldJSX = <div className={fieldClass}>
 					<Select
-		        mode="combobox"
-						id={this.props.fieldValue}
-		        value={this.state.fieldValue}
-						style= {{width: "200px"}}
-		        notFoundContent=""
-		        defaultActiveFirstOption={false}
-		        showArrow={false}
-		        filterOption={true}
-						onBlur={() => this.cancelEditing()}
-						onKeyPress={(e) => {
-							console.log('keypress', e);
-							if (e.key === 'Enter') {
-								e.preventDefault();
-								this.handleSave();
-							}}
-						}
-						dropdownMatchSelectWidth={false}
-		        onChange={this.handleFieldSearch}
-		      >
+					  mode={selectMode}
+					  labelInValue
+					  value={{key: this.state.fieldValue}}
+					  style= {{width: "200px"}}
+					  notFoundContent=""
+					  defaultActiveFirstOption={false}
+					  showArrow={!this.props.allowPickListSearch}
+					  filterOption={false}
+					  onBlur={() => this.cancelEditing()}
+					  dropdownMatchSelectWidth={false}
+					  onSearch={this.handleFieldSearch}
+					  onChange={value => this.setState({ fieldValue: value.key	})}
+					>
 		        {options}
 		      </Select>
 		      <a
@@ -90,9 +106,9 @@ class FieldItem extends React.Component {
 	      </div>
 	    } else {
 				//--------------------------------------------
-				//--Does not want to search analytixFields list
-				fieldJSX = <div className={this.props.customClass}>
-					<input
+				//--Does not want to search pickListValues list
+				fieldJSX = <div className={fieldClass}>
+					<CustomInput
 						id={this.props.fieldValue}
 						type="text"
 						value={this.state.fieldValue}
@@ -105,6 +121,7 @@ class FieldItem extends React.Component {
 								this.handleSave();
 							}
 						}}
+						useTextArea={this.props.useTextArea || false}
 					/>
 					<a
 						onMouseDown={() => {
@@ -127,11 +144,11 @@ class FieldItem extends React.Component {
 
 FieldItem.Proptypes = {
   fieldValue: PropTypes.string,
-	showSelectedValues: PropTypes.bool,  //If true we will show the analytixFields as select options
+	showPickList: PropTypes.bool,  //If true we will show the pickListValues as select options
+	pickListValues: PropTypes.array,
+	allowPickListSearch: PropTypes.bool,
 	customClass: PropTypes.string,
-  onSave: PropTypes.func
+	onSave: PropTypes.func
 };
 
-export default connect(state => (
-	{analytixFields: _.uniqBy(state.applications.selectedApplicationFields, 'field')}
-))(FieldItem);
+export default FieldItem;

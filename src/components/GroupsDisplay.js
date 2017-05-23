@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import GroupCard from './GroupCard';
 
@@ -9,6 +10,7 @@ class GroupsDisplay extends React.Component {
 	}
 
 	render() {
+		let analytixFieldsSorted = _.sortBy(_.uniqBy(this.props.analytixFields, 'key'), 'key');
 		return (
 			<div className="group-cards-container">
 				{
@@ -20,7 +22,7 @@ class GroupsDisplay extends React.Component {
 								<GroupCard key={group.id}
 									group={group}
 									fields={groupFields}
-									analytixFields={this.props.analytixFields}
+									analytixFields={analytixFieldsSorted}
 									onUpdateGroupFields={this.props.onUpdateGroupFields}
 									onUpdateGroup={this.props.onUpdateGroup}
 								/>
