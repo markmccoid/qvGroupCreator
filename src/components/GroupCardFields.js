@@ -18,7 +18,7 @@ const DragHandle = SortableHandle((props) => {
 			<div>Field</div>
 			<div className="sort-delete"
 				onMouseDown={props.onDeleteField}>
-				<img src="images/close-x.png" width="10" height="10" />
+				<img src="/images/close-x.png" width="10" height="10" />
 			</div>
 		</div>
 	);
@@ -42,12 +42,13 @@ const SortableItem = SortableElement((props) => {
 					<FieldItem
 						fieldValue={props.value.fieldLabel}
 						customClass="sortable-item"
+						inputType='input'
 						onSave={newFieldLabel => handleSaveFields(newFieldLabel, props.value.fieldName)}
 					/>
 					<FieldItem
 						fieldValue={props.value.fieldName}
 						customClass="sortable-item"
-						showPickList
+						inputType='select'
 						allowPickListSearch
 						pickListValues={props.analytixFields}
 						onSave={newFieldName => handleSaveFields(props.value.fieldLabel, newFieldName)}

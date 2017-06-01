@@ -44,8 +44,9 @@ class AddNewField extends React.Component {
 								<FieldItem
 									fieldValue={this.state.fieldName}
 									customClass="sortable-item"
-									showSearchList
-									searchList={this.props.analytixFields}
+									inputType='select'
+									allowPickListSearch
+									pickListValues={this.props.analytixFields}
 									onSave={newFieldName => this.setState({ fieldName: newFieldName })}
 								/>
 

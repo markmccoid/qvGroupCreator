@@ -15,3 +15,7 @@ export const LOAD_APPLICATION_GROUP_FIELDS = 'LOAD_APPLICATION_GROUP_FIELDS';
 export const UPDATE_GROUP_FIELDS = 'UPDATE_GROUP_FIELDS';
 //whenever a change in the a group happens update the whole group in redux store.
 export const UPDATE_GROUP = 'UPDATE_GROUP';
+//Adds a new group
+export const ADD_GROUP = 'ADD_GROUP';
+//Delete a group based on the id passed
+export const DELETE_GROUP = 'DELETE_GROUP';

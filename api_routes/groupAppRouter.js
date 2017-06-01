@@ -38,6 +38,7 @@ groupAppRouter.route('/groups/app/:appName')
     fs.readFile(GROUPS_FILE, (err, data) => {
       let qvGroups = JSON.parse(data); //convert json to js object
       let appName = req.params.appName.toLowerCase(); //get querystring if available
+      console.log(appName);
   		let appNameSansSpaces = appName.replace(/\s+/g, '');
       let applicationGroups = qvGroups.filter(qvGroup => qvGroup.application.toLowerCase() === appName);
   		//If requesting XML, get XML Data.

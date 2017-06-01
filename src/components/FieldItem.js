@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { Select } from 'antd';
 const Option = Select.Option;
 
+//Used for regular input and textarea input needs
 const CustomInput = (props) => {
-	if (props.useTextArea) {
+	//don't want to spread inputType to these components, getting rid of it.
+	let newProps = _.omit(props, 'inputType');
+	if (props.inputType === 'textarea') {
 		return (
 			<textarea
-				{...props}
+				{...newProps}
 				/>
 		);
 	} else {
 		return (
 			<input
-				{...props}
+				{...newProps}
 			/>
 		);
 	}
@@ -23,20 +27,20 @@ class FieldItem extends React.Component {
   state = {
     editing: false,
     fieldValue: this.props.fieldValue,
-		availablepickListValues: this.props.showPickList ? this.props.pickListValues : []
+		availablepickListValues: this.props.inputType === 'select' ? this.props.pickListValues : []
   }
 
 	cancelEditing = () => {
 		this.setState({
 			editing: false,
 			fieldValue: '',
-			availablepickListValues: this.props.showPickList ? this.props.pickListValues : []
+			availablepickListValues: this.props.inputType === 'select' ? this.props.pickListValues : []
 		});
 	}
 	componentDidUpdate() {
 		//if editing and we are not allowing them to select values from list and (state and passed field value) are equal
 		//Give the input element focus
-		if(this.state.editing && !this.props.showPickList && this.state.fieldValue === this.props.fieldValue) {
+		if(this.state.editing && !this.props.inputType === 'select' && this.state.fieldValue === this.props.fieldValue) {
 			//I have assign the fieldValue as the html id attribute on the input element
 			let inputElem = this.props.fieldValue;
 			//Give this element focus. Then the onFocus event actually selects the text
@@ -48,7 +52,7 @@ class FieldItem extends React.Component {
 //then set editing state to false
 	handleSave = () => {
 		this.props.onSave(this.state.fieldValue);
-		this.setState({ editing: false, availablepickListValues: this.props.showPickList ? this.props.pickListValues : [] });
+		this.setState({ editing: false, availablepickListValues: this.props.inputType === 'select' ? this.props.pickListValues : [] });
 	}
 
 	handleFieldSearch = value => {
@@ -73,11 +77,19 @@ class FieldItem extends React.Component {
           {this.props.fieldValue}
         </div>;
     if (this.state.editing) {
-			if (this.props.showPickList) {
+			if (this.props.inputType === 'select') {
 				//--------------------------------------------
 				//--Search pickListValues list
 				const options = this.state.availablepickListValues.map(aField => <Option key={aField.key} value={aField.key} >{aField.label}</Option>);
-	      fieldJSX = <div className={fieldClass}>
+	      fieldJSX =
+					<div
+						className={fieldClass}
+						onKeyPress={e => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								this.handleSave();
+							}
+						}}>
 					<Select
 					  mode={selectMode}
 					  labelInValue
@@ -121,7 +133,7 @@ class FieldItem extends React.Component {
 								this.handleSave();
 							}
 						}}
-						useTextArea={this.props.useTextArea || false}
+						inputType={this.props.inputType}
 					/>
 					<a
 						onMouseDown={() => {
@@ -145,6 +157,7 @@ class FieldItem extends React.Component {
 FieldItem.Proptypes = {
   fieldValue: PropTypes.string,
 	showPickList: PropTypes.bool,  //If true we will show the pickListValues as select options
+	inputType: PropTypes.oneOf(['select', 'input', 'textarea']),
 	pickListValues: PropTypes.array,
 	allowPickListSearch: PropTypes.bool,
 	customClass: PropTypes.string,

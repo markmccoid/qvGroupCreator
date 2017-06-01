@@ -20,7 +20,7 @@ export const startLoadApplicationList = () => {
 	};
 };
 
-export const setSelectedApplication = (appName) => {
+export const setSelectedApplication = (appName = '') => {
 	return {
 		type: SET_SELECTED_APPLICATION,
 		appName

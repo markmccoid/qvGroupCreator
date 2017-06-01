@@ -1,6 +1,5 @@
 import React from 'react';
-
-
+import { NavLink } from 'react-router-dom';
 
 var Navbar = (props) => {
 	return (
@@ -20,8 +19,12 @@ var Navbar = (props) => {
 
 			<div className="head-col2-container">
 				<ul className="header-menu header-menu-left">
-					<li><a to="/main" >Home</a></li>
-		      <li><a to="/" >Edit/Add</a></li>
+					<li>
+						<NavLink to="/" >Home</NavLink>
+					</li>
+		      <li>
+						<NavLink to="/settings" >Settings</NavLink>
+					</li>
 				</ul>
 
 				<ul className="header-menu header-menu-right">

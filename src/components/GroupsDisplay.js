@@ -11,10 +11,13 @@ class GroupsDisplay extends React.Component {
 
 	render() {
 		let analytixFieldsSorted = _.sortBy(_.uniqBy(this.props.analytixFields, 'key'), 'key');
+		//Sorts descending by createDate and modifyDate.  This means the most recent will always show up first.
+		//Also, for system groups (those with the same createDate), the group most recently modified will show up first.
+		let sortedGroups = _.reverse(_.sortBy(this.props.groups, ["createDate", "modifyDate"]));
 		return (
 			<div className="group-cards-container">
 				{
-					this.props.groups.map(group => {
+					sortedGroups.map(group => {
 						//Get the fields for the group we are working on
 						//The fields are in an object where the keys are the group ids
 						let groupFields = this.props.groupFields[group.id] || [];
@@ -25,6 +28,7 @@ class GroupsDisplay extends React.Component {
 									analytixFields={analytixFieldsSorted}
 									onUpdateGroupFields={this.props.onUpdateGroupFields}
 									onUpdateGroup={this.props.onUpdateGroup}
+									onDeleteGroup={this.props.onDeleteGroup}
 								/>
 						);
 					})
@@ -38,7 +42,10 @@ class GroupsDisplay extends React.Component {
 GroupsDisplay.propTypes = {
 	groups: PropTypes.array,
 	groupFields: PropTypes.object,
-	analytixFields: PropTypes.array
+	analytixFields: PropTypes.array,
+	onUpdateGroupFields: PropTypes.func,
+	onUpdateGroup: PropTypes.func,
+	onDeleteGroup: PropTypes.func
 }
 
 export default GroupsDisplay;

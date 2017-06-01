@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { arrayMove } from 'react-sortable-hoc';
 
+import { confirmDialog } from '../helpers';
 import FieldItem from './FieldItem';
 import AddNewField from './AddNewField';
 import GroupCardFields from './GroupCardFields';
@@ -51,6 +52,12 @@ class GroupCard extends React.Component {
 		newFields.push(newField);
 		//dispatch action to update fields for group in redux store and on server.
 		this.props.onUpdateGroupFields(this.props.group.id, newFields);
+	}
+	handleDeleteGroup = () => {
+		confirmDialog('Delete Group?','Ok to Delete group.',
+				() => this.props.onDeleteGroup(this.props.group.id),
+				null,
+				'Group Deleted');
 	}
 	groupValueUpdateFactory = groupKey => newGroupValue => {
 		//We can either create a new server REST Put call to change a single group title OR
@@ -104,6 +111,7 @@ class GroupCard extends React.Component {
 					<FieldItem
 						fieldValue={groupName}
 						customClass="gc-title"
+						inputType='input'
 						onSave={(newGroupName) => this.handleGroupNameUpdate(newGroupName)}
 					/>
 				</div>
@@ -115,7 +123,7 @@ class GroupCard extends React.Component {
 							<FieldItem
 								fieldValue={groupType}
 								customClass="gc-detail-value"
-								showPickList
+								inputType='select'
 								pickListValues={[{key: 'Cyclic', label: 'Cyclic'}, {key: 'Drill', label: 'Drill'}]}
 								onSave={(newGroupType) => this.handleGroupTypeUpdate(newGroupType)}
 							/>
@@ -137,7 +145,7 @@ class GroupCard extends React.Component {
 							<FieldItem
 								fieldValue={groupNotes}
 								customClass="gc-detail-value"
-								useTextArea
+								inputType='textarea'
 								onSave={(newGroupNotes) => this.handleGroupNotesUpdate(newGroupNotes)}
 							/></div>
 					</div>
@@ -145,12 +153,9 @@ class GroupCard extends React.Component {
 
 				<div
 					className="hover-buttons close"
-					onClick={() => alert('edit')}
+					onClick={this.handleDeleteGroup}
 				>
-					<img src="./images/close-x.png" width="16" height="16" />
-				</div>
-				<div className="hover-buttons edit" onClick={()=> alert('edit')}>
-					<img src="./images/edit-pen.png" width="16" height="16" />
+					<img src="/images/close-x.png" width="16" height="16" />
 				</div>
 			</div>
 		);
@@ -162,7 +167,8 @@ GroupCard.propTypes = {
 	fields: PropTypes.array,
 	analytixFields: PropTypes.array,
 	onUpdateGroupFields: PropTypes.func,
-	onUpdateGroup: PropTypes.func
+	onUpdateGroup: PropTypes.func,
+	onDeleteGroup: PropTypes.func
 };
 
 export default GroupCard;

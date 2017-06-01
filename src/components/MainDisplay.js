@@ -1,12 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
+import { createEmptyGroupObj } from '../api';
 import AppSidebar from './AppSidebar';
 import GroupCreator from './GroupCreator';
 
 import { startLoadApplicationList,
- 				 setSelectedApplication
+ 				 setSelectedApplication,
+				 startAddGroup
 			 } from '../actions';
 
 class MainDisplay extends React.Component {
@@ -18,6 +21,11 @@ class MainDisplay extends React.Component {
 		//dispatch action to get the unique application names stored in qvGroups.json
 		this.props.getApplicationNames();
 	}
+  componentWillReceiveProps(nextProps) {
+      if (nextProps.location.pathname === '/') {
+        this.props.setSelectedApplication('');
+      }
+  }
 
 	handleLoadApplication = appName => {
 		//call action to update redux store with clicked on application
@@ -26,6 +34,7 @@ class MainDisplay extends React.Component {
 
 	render() {
 		let selectedApplication = this.props.selectedApplication || '';
+    console.log(this.props.location.pathname);
 		return (
 			<div className="content-container">
 				<nav className="content-nav">
@@ -37,9 +46,17 @@ class MainDisplay extends React.Component {
 				</nav>
 				<main className="content-body">
 						<h2>	{selectedApplication ? selectedApplication + ' Groups' : 'Select an Application'  }</h2>
-						<GroupCreator
-							selectedApplication={this.props.selectedApplication}
-						/>
+						{selectedApplication ?
+							<a
+                onClick={() => this.props.addGroup(createEmptyGroupObj(selectedApplication))}
+                className="button primary"
+              >
+              Add New Group
+              </a>
+							:
+							null
+						}
+						<Route path="/app/:appName" component={GroupCreator} />
 				</main>
 			</div>
 		);
@@ -61,7 +78,13 @@ const mapStateToProps = (state) => {
 // 	};
 // };
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
 	getApplicationNames: startLoadApplicationList,
-	setSelectedApplication: setSelectedApplication
-})(MainDisplay);
+	setSelectedApplication: setSelectedApplication,
+	addGroup: startAddGroup
+})(MainDisplay));
+
+
+// <GroupCreator
+// 	selectedApplication={this.props.selectedApplication}
+// />

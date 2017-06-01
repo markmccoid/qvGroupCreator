@@ -3,7 +3,9 @@ import * as api from '../api';
 import { LOAD_APPLICATION_GROUPS,
  				 LOAD_APPLICATION_GROUP_FIELDS,
 			 	 UPDATE_GROUP_FIELDS,
-			 	 UPDATE_GROUP } from './actionTypes';
+			 	 UPDATE_GROUP,
+			   ADD_GROUP,
+			   DELETE_GROUP } from './actionTypes';
 
 //-----------------------------------------------
 //-LOAD OF GROUPS For an Application
@@ -73,6 +75,42 @@ export const startUpdateGroupFields = (groupId, groupFieldArray) => {
 		api.updateGroupFieldData(groupId, groupFieldArray)
 			.then(response => {
 				dispatch(updateGroupFields(groupId, groupFieldArray));
+			});
+	};
+};
+
+//-----------------------------------------------
+//-ADD GROUP record based on passed group Obj
+export const addGroup = groupObj => {
+	return {
+		type: ADD_GROUP,
+		groupObj
+	};
+};
+
+export const startAddGroup = groupObj => {
+	return dispatch => {
+		api.addGroup(groupObj)
+			.then(data => {
+				dispatch(addGroup(data));  //Post to server will return a new group object with the uuid added.
+			});
+	};
+};
+
+//-----------------------------------------------
+//-DELETE GROUP based on Group id passed
+export const deleteGroup = groupId => {
+	return {
+		type: DELETE_GROUP,
+		groupId
+	};
+};
+
+export const startDeleteGroup = groupId => {
+	return dispatch => {
+		api.deleteGroup(groupId)
+			.then(response => {
+				dispatch(deleteGroup(groupId));
 			});
 	};
 };

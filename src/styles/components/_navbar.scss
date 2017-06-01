@@ -5,7 +5,7 @@ HEADER CSS START
 ---------------------*/
 .header-container {
   display: flex;
-	background: #ccc;
+	background: $header-background;
 	flex-direction: column;
   border: 1px solid #7e7e7e;
 }

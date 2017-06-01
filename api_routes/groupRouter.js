@@ -48,8 +48,8 @@ groupRouter.route('/groups')
       fs.writeFile(GROUPS_FILE, JSON.stringify(groups), () => {
         let applicationGroups = groups.filter(qvGroup => qvGroup.application.toLowerCase() === req.body.application.toLowerCase());
         res.setHeader('Cache-Control', 'no-cache');
-        //return the variables file so application can update it's
-        res.json(applicationGroups);
+        //return the new Group record.
+        res.json(newGroup);
       });
     });
   })

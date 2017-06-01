@@ -1,5 +1,18 @@
 import axios from 'axios';
 import _ from 'lodash';
+import moment from 'moment';
+
+export const createEmptyGroupObj = appName => {
+	return {
+    application: appName,
+  	groupName: "_c_NEWGROUP",
+    groupType: "Cyclic",
+    groupNotes: "",
+		fields: [],
+    createDate: moment().unix(),
+		createUser: "user"
+	};
+};
 
 export const getApplicationNames = () => {
 	return axios.get('/api/groups/app')
@@ -35,6 +48,8 @@ export const getGroupData = appName => {
 };
 
 //Get the field information for all the groups for the passed appName.
+//We are transforming the group field data from an array of fields with group ids,
+//to an object with the group ids as object keys
 /*
 ***data before******************:
 	[{
@@ -90,4 +105,22 @@ export const updateGroup = groupObj => {
 export const getAnalytixFields = appName => {
 	return axios.get(`/api/analytixfields/${appName}`)
 		.then(response => response.data);
+}
+
+//--Add a new group to the qvGroups.json file
+export const addGroup = groupObj => {
+	return axios.post(`/api/groups/`, groupObj)
+		.then(response => {
+			console.log(response);
+			return response.data;
+		})
+}
+
+//--Delete group from the qvGroups.json file based on the group id passed
+export const deleteGroup = groupId => {
+	return axios.delete(`/api/groups/${groupId}`)
+		.then(response => {
+			console.log(response);
+			return response.data;
+		})
 }

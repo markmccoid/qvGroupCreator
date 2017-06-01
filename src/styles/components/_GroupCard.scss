@@ -11,6 +11,29 @@ Group Card CSS START
   height: auto;
 	width: 350px;
 	position: relative;
+	background: $card-main-background;
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: .5s;
+}
+
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: .5s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .gc-title {
@@ -128,7 +151,7 @@ Group Card CSS START
     width: 25px;
     height: auto;
 		padding: 0 40px;
-    background: #a2a2a2 url("/images/3dots.png") no-repeat center;
+    background: $sortable-handle-background;
     opacity: .75;
     cursor: row-resize;
 		border-right: 1px solid black;
@@ -160,6 +183,9 @@ Group Card CSS START
   border-radius: 50%;
   opacity: 0;
   cursor: pointer;
+	transition-property: opacity;
+	transition-duration: .5s;
+	transition-delay: 0s;
 }
 .close {
   top: -15px;
@@ -171,6 +197,9 @@ Group Card CSS START
 }
 .gc-container:hover .hover-buttons {
   opacity: 1;
+	transition-property: opacity;
+	transition-duration: 1s;
+	transition-delay: 1s;
 }
 .hover-buttons:hover {
   background-color: #e87373;

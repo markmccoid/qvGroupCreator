@@ -2,10 +2,11 @@
 
 The component creates an editable field.  Initially, the value is displayed in as text and then when clicked on, an input box is shown for the user to enter a new value in.
 
-**This component has two editing modes.**
+**This component has three editing modes.**
 
 1. Standard text input edit.  User can enter anything in the input box when editing.
-2. Drop down select.  User can select an option from a drop down select control. This mode uses the **\<Select \/\>** react component from [ant design](https://ant.design/components/select/) to allow for a drop down select.
+2. Text Area input.
+3. Drop down select.  User can select an option from a drop down select control. This mode uses the **\<Select \/\>** react component from [ant design](https://ant.design/components/select/) to allow for a drop down select.
 
 A **"Save"** and **"Cancel"** button are provided.  When **"Cancel"** is pressed, any edits are discarded and the user is returned to the original static text.  This cancel operation is also performed on a blur action.
 
@@ -13,13 +14,14 @@ When **"Save"** is pressed the **onSave** function that is passed as a prop is c
 
 ### Props List:
 
-- **fieldValue**
-- **showPickList** - Boolean, when true, component will display searchList
+- **fieldValue** - Initial value of the field
+- **inputType** - 'select', 'input', 'textarea' - **required**
 - **pickListValues** - Array of objects in shape { key, label } where **label** is what you see in dropdown and is what is searched, but **key** is what is shown when an item is selected.
-- **allowPickListSearch** -- Boolean, when true, allows searching of pick list by typing.  
-- **onSave**
+- **allowPickListSearch** - Boolean, when true, allows searching of pick list by typing.  If not passed or false, user can only scroll to find selection.  
+- **onSave** - Function called when "save" button is pressed.
+- **customClass** - class name is added to div containing elements.
 - **searchLabel**
-- **customClass**
+
 
 ### Dropdown Select Mode details
 
