@@ -2,14 +2,14 @@ import { createStore, combineReducers, applyMiddleware, compose, reduxMiddleware
 import thunk from 'redux-thunk';
 
 //Import reducers..
-import { appStateReducer, groupsReducer, groupFieldsReducer, fieldsReducer } from '../reducers';
+import { appStateReducer, groupsReducer, groupFieldsReducer } from '../reducers';
 
 //--Take out in production -- Using for testing to make sure not mutating state in reducers
 import freeze from 'redux-freeze';
 
 //Setup the initil redux state
 const INITIAL_STATE = {
-			applications: {},
+			applications: {user: 'user'},
 			groups: {
 					groupsInfo: [],
 					groupFields: {}

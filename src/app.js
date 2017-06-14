@@ -28,7 +28,7 @@ var store = require('./store/configureStore').configure();
 ReactDOM.render(
 	<Provider store={store}>
 		<Router>
-			<Main />
+			<Main/>
 		</Router>
 	</Provider>,
   document.getElementById('app')

@@ -70,9 +70,9 @@ export const updateGroupFields = (groupId, groupFieldObject) => {
 	};
 };
 
-export const startUpdateGroupFields = (groupId, groupFieldArray) => {
+export const startUpdateGroupFields = (groupId, groupFieldArray, modifyUser) => {
 	return dispatch => {
-		api.updateGroupFieldData(groupId, groupFieldArray)
+		api.updateGroupFieldData(groupId, groupFieldArray, modifyUser)
 			.then(response => {
 				dispatch(updateGroupFields(groupId, groupFieldArray));
 			});

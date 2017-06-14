@@ -22,6 +22,8 @@ class MainDisplay extends React.Component {
 		this.props.getApplicationNames();
 	}
   componentWillReceiveProps(nextProps) {
+		//When component reloads, check location pathname and if we are back to the root
+		//clear the application name as we should be back to no application selected.
       if (nextProps.location.pathname === '/') {
         this.props.setSelectedApplication('');
       }
@@ -34,11 +36,10 @@ class MainDisplay extends React.Component {
 
 	render() {
 		let selectedApplication = this.props.selectedApplication || '';
-    console.log(this.props.location.pathname);
 		return (
 			<div className="content-container">
 				<nav className="content-nav">
-					<h5>Applications</h5>
+					<h5 style={{textAlign: "center"}}>Applications</h5>
 					<AppSidebar
 						applicationList={this.props.applicationList}
 						onLoadApplication={this.handleLoadApplication}
@@ -48,7 +49,7 @@ class MainDisplay extends React.Component {
 						<h2>	{selectedApplication ? selectedApplication + ' Groups' : 'Select an Application'  }</h2>
 						{selectedApplication ?
 							<a
-                onClick={() => this.props.addGroup(createEmptyGroupObj(selectedApplication))}
+                onClick={() => this.props.addGroup(createEmptyGroupObj(selectedApplication, this.props.user))}
                 className="button primary"
               >
               Add New Group
@@ -65,6 +66,7 @@ class MainDisplay extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		user: state.applications.user,
 		applicationList: state.applications.applicationList || [],
 		selectedApplication: state.applications.selectedApplication || ''
 	}

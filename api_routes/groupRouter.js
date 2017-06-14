@@ -145,6 +145,7 @@ groupRouter.route('/groups')
           groups.forEach(group => {
             if (group.id === req.params.id) {
               group.fields = req.body.fields;
+              group.modifyUser = req.body.modifyUser;
             }
           });
           fs.writeFile(GROUPS_FILE, JSON.stringify(groups), () => {

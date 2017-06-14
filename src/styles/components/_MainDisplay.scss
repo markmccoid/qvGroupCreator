@@ -29,7 +29,7 @@ CONTENT CSS START
   border-top: 1px solid #7e7e7e;
 }
 .content-nav li:last-child {
-  margin-bottom: 10px;
+  margin-bottom: 0px; //Choosing not to set margin cause it causes issues if you color background
 }
 .content-nav li a {
   display: inline-block;

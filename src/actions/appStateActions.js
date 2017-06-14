@@ -1,6 +1,9 @@
 import * as api from '../api';
 
-import { LOAD_APPLICATION_LIST, SET_SELECTED_APPLICATION } from './actionTypes';
+import { LOAD_APPLICATION_LIST,
+				 SET_SELECTED_APPLICATION,
+			   CLEAR_APPLICATION_STATE,
+			   SET_USER } from './actionTypes';
 
 //-----------------------------------------------
 export const loadApplicationList = (appList) => {
@@ -26,3 +29,16 @@ export const setSelectedApplication = (appName = '') => {
 		appName
 	};
 };
+
+export const clearApplicationState = () => {
+	return {
+		type: CLEAR_APPLICATION_STATE
+	};
+};
+
+export const updateUser = (user) => {
+	return {
+		type: SET_USER,
+		user
+	}
+}

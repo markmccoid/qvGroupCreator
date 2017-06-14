@@ -44,7 +44,7 @@ groupAppRouter.route('/groups/app/:appName')
   		//If requesting XML, get XML Data.
   		if (req.query.format === 'xml') {
   			const x2js = new X2JS();
-  			let xmlString = x2js.js2xml({variable: applicationGroups});
+  			let xmlString = x2js.js2xml({group: applicationGroups});
         //Enclose xml created with the appName, otherwise Qlik won't recognize properly
   			applicationGroups = `<${appNameSansSpaces}>${xmlString}</${appNameSansSpaces}>`;
   			//write the groups array back to the server disk navigating to the include directory

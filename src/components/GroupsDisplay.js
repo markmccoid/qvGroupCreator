@@ -23,6 +23,7 @@ class GroupsDisplay extends React.Component {
 						let groupFields = this.props.groupFields[group.id] || [];
 						return (
 								<GroupCard key={group.id}
+									user={this.props.user}
 									group={group}
 									fields={groupFields}
 									analytixFields={analytixFieldsSorted}
@@ -40,6 +41,7 @@ class GroupsDisplay extends React.Component {
 
 //#--PropTypes---###//
 GroupsDisplay.propTypes = {
+	user: PropTypes.string,
 	groups: PropTypes.array,
 	groupFields: PropTypes.object,
 	analytixFields: PropTypes.array,

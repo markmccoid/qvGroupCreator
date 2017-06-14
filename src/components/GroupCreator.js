@@ -58,6 +58,7 @@ class GroupCreator extends React.Component {
 					onUpdateGroupFields={this.props.startUpdateGroupFields}
 					onUpdateGroup={this.props.startUpdateGroup}
 					onDeleteGroup={this.props.deleteGroup}
+					user={this.props.user}
 				/>
 
 		);
@@ -66,6 +67,7 @@ class GroupCreator extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		user: state.applications.user,
 		groups: state.groups.groupsInfo,
 		groupFields: state.groups.groupFields,
 		analytixFields: state.applications.selectedApplicationFields

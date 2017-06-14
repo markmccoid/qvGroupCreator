@@ -3,7 +3,8 @@ import _ from 'lodash';
 import { LOAD_APPLICATION_GROUPS,
 			 	 UPDATE_GROUP,
 			   ADD_GROUP,
-			   DELETE_GROUP } from '../actions';
+			   DELETE_GROUP,
+			 	 CLEAR_APPLICATION_STATE } from '../actions';
 
 export const groupsReducer = (state = [], action) => {
 	switch (action.type) {
@@ -20,6 +21,9 @@ export const groupsReducer = (state = [], action) => {
 		case DELETE_GROUP:
 			//Remove the group that was deleted
 			return state.filter(group => group.id !== action.groupId);
+		case CLEAR_APPLICATION_STATE:
+			//clear the group info...note, same thing will happened to group fields
+			return [];
 		default:
 			return state;
 	}

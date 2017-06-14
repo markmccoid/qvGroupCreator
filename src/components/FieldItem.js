@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import uuid from 'uuid'
 import { Select } from 'antd';
 const Option = Select.Option;
 
@@ -10,14 +12,20 @@ const CustomInput = (props) => {
 	let newProps = _.omit(props, 'inputType');
 	if (props.inputType === 'textarea') {
 		return (
-			<textarea
+			<textarea autoFocus
 				{...newProps}
 				/>
 		);
 	} else {
 		return (
-			<input
+			<input autoFocus
 				{...newProps}
+				onKeyPress={(e) => {
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						this.handleSave();
+					}
+				}}
 			/>
 		);
 	}
@@ -38,13 +46,10 @@ class FieldItem extends React.Component {
 		});
 	}
 	componentDidUpdate() {
-		//if editing and we are not allowing them to select values from list and (state and passed field value) are equal
-		//Give the input element focus
-		if(this.state.editing && !this.props.inputType === 'select' && this.state.fieldValue === this.props.fieldValue) {
-			//I have assign the fieldValue as the html id attribute on the input element
-			let inputElem = this.props.fieldValue;
-			//Give this element focus. Then the onFocus event actually selects the text
-			document.getElementById(inputElem).focus();
+		//if editing and the edit item is select AND values from list and (state and passed field value) are equal
+		//Give the input element focus (i.e. click on it)
+		if(this.state.editing && this.props.inputType === 'select' && this.state.fieldValue === this.props.fieldValue) {
+			ReactDOM.findDOMNode(this.refs.select).click();
 		}
 	}
 
@@ -65,7 +70,7 @@ class FieldItem extends React.Component {
 
   render() {
 
-		let fieldClass = this.props.customClass + " field-item-js";
+		let fieldClass = this.props.customClass;
 		let selectMode = this.props.allowPickListSearch ? "combobox" : "";
 
 		let fieldJSX =
@@ -74,65 +79,87 @@ class FieldItem extends React.Component {
 					style={{cursor: "pointer"}}
           onClick={() => this.setState({ editing: true, fieldValue: this.props.fieldValue })}
         >
-          {this.props.fieldValue}
+          <span className='field-item-js'>{this.props.fieldValue}</span>
         </div>;
     if (this.state.editing) {
 			if (this.props.inputType === 'select') {
-				//--------------------------------------------
-				//--Search pickListValues list
-				const options = this.state.availablepickListValues.map(aField => <Option key={aField.key} value={aField.key} >{aField.label}</Option>);
-	      fieldJSX =
-					<div
-						className={fieldClass}
-						onKeyPress={e => {
-							if (e.key === 'Enter') {
-								e.preventDefault();
-								this.handleSave();
+				if ( this.state.fieldValue.length > 50 ) {
+					const itemId = uuid.v1();
+					fieldJSX = <div className={fieldClass}>
+						<CustomInput
+							id={itemId}
+							type="text"
+							value={this.state.fieldValue}
+							onFocus={() => document.getElementById(itemId).select()}
+							onChange={(e) => this.setState({ fieldValue: e.target.value })}
+							onBlur={this.cancelEditing}
+							inputType="textarea"
+						/>
+						<a
+							onMouseDown={() => {
+									this.handleSave();
+								}
 							}
-						}}>
-					<Select
-					  mode={selectMode}
-					  labelInValue
-					  value={{key: this.state.fieldValue}}
-					  style= {{width: "200px"}}
-					  notFoundContent=""
-					  defaultActiveFirstOption={false}
-					  showArrow={!this.props.allowPickListSearch}
-					  filterOption={false}
-					  onBlur={() => this.cancelEditing()}
-					  dropdownMatchSelectWidth={false}
-					  onSearch={this.handleFieldSearch}
-					  onChange={value => this.setState({ fieldValue: value.key	})}
-					>
-		        {options}
-		      </Select>
-		      <a
-		        onMouseDown={() => {
-								this.handleSave();
-		          }
-						}
-		      >Save</a>
-					<a onClick={this.cancelEditing}>
-						Cancel
-					</a>
-	      </div>
+						>Save</a>
+						<a onClick={this.cancelEditing}>
+							Cancel
+						</a>
+					</div>
+				} else {
+					//--------------------------------------------
+					//--Search pickListValues list
+					const options = this.state.availablepickListValues.map(aField => <Option key={aField.key} value={aField.key} >{aField.label}</Option>);
+		      fieldJSX =
+						<div
+							className={fieldClass}
+							onKeyPress={e => {
+								if (e.key === 'Enter') {
+									e.preventDefault();
+									this.handleSave();
+								}
+							}}>
+						<Select
+						  mode={selectMode}
+							autoFocus
+							ref="select"
+						  labelInValue
+						  value={{key: this.state.fieldValue}}
+						  style= {{width: "200px"}}
+						  notFoundContent=""
+						  defaultActiveFirstOption={false}
+						  showArrow={!this.props.allowPickListSearch}
+						  filterOption={false}
+						  onBlur={() => this.cancelEditing()}
+						  dropdownMatchSelectWidth={false}
+						  onSearch={this.handleFieldSearch}
+						  onChange={value => this.setState({ fieldValue: value.key	})}
+						>
+			        {options}
+			      </Select>
+			      <a
+			        onMouseDown={() => {
+									this.handleSave();
+			          }
+							}
+			      >Save</a>
+						<a onClick={this.cancelEditing}>
+							Cancel
+						</a>
+		      </div>
+				}
 	    } else {
 				//--------------------------------------------
 				//--Does not want to search pickListValues list
+				//--create unique id using uuid
+				const itemId = uuid.v1();
 				fieldJSX = <div className={fieldClass}>
 					<CustomInput
-						id={this.props.fieldValue}
+						id={itemId}
 						type="text"
 						value={this.state.fieldValue}
-						onFocus={() => document.getElementById(this.props.fieldValue).select()}
+						onFocus={() => document.getElementById(itemId).select()}
 						onChange={(e) => this.setState({ fieldValue: e.target.value })}
 						onBlur={this.cancelEditing}
-						onKeyPress={(e) => {
-							if (e.key === 'Enter') {
-								e.preventDefault();
-								this.handleSave();
-							}
-						}}
 						inputType={this.props.inputType}
 					/>
 					<a

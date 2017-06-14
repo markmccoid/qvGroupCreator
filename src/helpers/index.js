@@ -24,5 +24,5 @@ export const confirmDialog = (title='', msg='', okfn, cancelfn = undefined, succ
 						if(cancelfn) {
 							cancelfn();
 						}
-					})
+					}).set('labels', {ok: alertify.defaults.glossary.ok, cancel: alertify.defaults.glossary.cancel});
 };

@@ -39,19 +39,19 @@ class GroupCard extends React.Component {
 			 });
 	 	}
 		 //dispatch action to update fields for group in redux store and on server.
-		 this.props.onUpdateGroupFields(this.props.group.id, newArrayOfFields);
+		 this.props.onUpdateGroupFields(this.props.group.id, newArrayOfFields, this.props.user);
 	}
 	handleNewGroupField = (newLabel, newName) => {
 		let newFields = _.sortBy([...this.props.fields], 'fieldOrder');
 		let newField = {
 			fieldLabel: newLabel,
 			fieldName: newName,
-			fieldOrder: this.props.fields.length
+			fieldOrder: this.props.fields.length + 1
 		};
 
 		newFields.push(newField);
 		//dispatch action to update fields for group in redux store and on server.
-		this.props.onUpdateGroupFields(this.props.group.id, newFields);
+		this.props.onUpdateGroupFields(this.props.group.id, newFields, this.props.user);
 	}
 	handleDeleteGroup = () => {
 		confirmDialog('Delete Group?','Ok to Delete group.',
@@ -68,6 +68,7 @@ class GroupCard extends React.Component {
 		let newGroup = {...this.props.group};
 		newGroup[groupKey] = newGroupValue;
 		newGroup.modifyDate = moment().unix();
+		newGroup.modifyUser = this.props.user;
 		newGroup.fields = this.props.fields;
 		//Call redux action to update the group on the server and redux store
 		this.props.onUpdateGroup(newGroup);
@@ -101,7 +102,7 @@ class GroupCard extends React.Component {
 					}
 				});
 			//dispatch action to update fields for group in redux store and on server.
-			this.props.onUpdateGroupFields(this.props.group.id, newArrayOfFields);
+			this.props.onUpdateGroupFields(this.props.group.id, newArrayOfFields, this.props.user);
 		}
 
 		return (
@@ -163,6 +164,7 @@ class GroupCard extends React.Component {
 }
 //#--PropTypes---###//
 GroupCard.propTypes = {
+	user: PropTypes.string,
 	group: PropTypes.object,
 	fields: PropTypes.array,
 	analytixFields: PropTypes.array,

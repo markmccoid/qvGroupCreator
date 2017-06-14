@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import moment from 'moment';
 
-export const createEmptyGroupObj = appName => {
+export const createEmptyGroupObj = (appName, user) => {
 	return {
     application: appName,
   	groupName: "_c_NEWGROUP",
@@ -10,7 +10,7 @@ export const createEmptyGroupObj = appName => {
     groupNotes: "",
 		fields: [],
     createDate: moment().unix(),
-		createUser: "user"
+		createUser: user
 	};
 };
 
@@ -85,8 +85,8 @@ export const getGroupFieldData = appName => {
 }
 
 //--Update the fields of the groupId passed
-export const updateGroupFieldData = (groupId, fieldsArray) => {
-	return axios.put(`/api/groups/${groupId}/fields`, {fields: fieldsArray} )
+export const updateGroupFieldData = (groupId, fieldsArray, modifyUser) => {
+	return axios.put(`/api/groups/${groupId}/fields`, {fields: fieldsArray, modifyUser} )
 		.then(response => {
 			console.log(response);
 			return response.status; //expect 200 for success
@@ -124,3 +124,10 @@ export const deleteGroup = groupId => {
 			return response.data;
 		})
 }
+
+//Returns XML for the Groups of the passed appName (application)
+export const getXMLApplicationVariables = appName => {
+		console.log(`/api/groups/app/${appName}?format=xml`);
+		return axios.get(`/api/groups/app/${appName}?format=xml`)
+			.then(response => response.data);
+};

@@ -1,8 +1,9 @@
 import { LOAD_APPLICATION_GROUPS,
 			 	 LOAD_APPLICATION_GROUP_FIELDS,
-			 	 UPDATE_GROUP_FIELDS } from '../actions';
+			 	 UPDATE_GROUP_FIELDS,
+			 	 CLEAR_APPLICATION_STATE } from '../actions';
 
-export const groupFieldsReducer = (state = [], action) => {
+export const groupFieldsReducer = (state = {}, action) => {
 	switch (action.type) {
 		case LOAD_APPLICATION_GROUP_FIELDS:
 			return (action.groupFieldsObject);
@@ -12,6 +13,8 @@ export const groupFieldsReducer = (state = [], action) => {
 				...state,
 				[groupId]: groupFieldObject
 			}
+		case CLEAR_APPLICATION_STATE:
+			return {};
 		default:
 			return state;
 	}

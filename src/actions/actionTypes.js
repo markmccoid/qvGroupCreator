@@ -1,7 +1,11 @@
 //-----App State Action Types -----------------------------------------//
 export const LOAD_APPLICATION_LIST = 'LOAD_APPLICATION_LIST';
 export const SET_SELECTED_APPLICATION = 'SET_SELECTED_APPLICATION';
-
+//intended to clear out all redux store applying to a loaded application.
+//used when moving to different routes and want to make sure no residual store info
+//for the application or groups nodes is left.
+export const CLEAR_APPLICATION_STATE = 'CLEAR_APPLICATION_STATE';
+export const SET_USER = 'SET_USER';
 
 //-----Group Action Types -----------------------------------------//
 //-Loads the analytix fields for the selected application

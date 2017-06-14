@@ -1,6 +1,8 @@
 import { LOAD_APPLICATION_LIST,
  				 SET_SELECTED_APPLICATION,
-				 LOAD_ANALYTIX_FIELDS
+				 LOAD_ANALYTIX_FIELDS,
+				 CLEAR_APPLICATION_STATE,
+				 SET_USER
 			 } from '../actions';
 
 export const appStateReducer = (state = {}, action) => {
@@ -18,7 +20,18 @@ export const appStateReducer = (state = {}, action) => {
 			return {
 				...state,
 				selectedApplicationFields: action.fieldsArray
-			}
+			};
+		case CLEAR_APPLICATION_STATE:
+			return {
+				...state,
+				selectedApplication: '',
+				selectedApplicationFields: []
+			};
+		case SET_USER:
+			return {
+				...state,
+				user: action.user
+			};
 		default:
 			return state;
 	}

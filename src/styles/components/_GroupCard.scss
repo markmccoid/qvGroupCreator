@@ -98,9 +98,12 @@ Group Card CSS START
 	background-color: white;
 	width: 100%;
 }
+.gc-detail-value a {
+	padding: 5px 5px;
+}
 .field-item-js input {
 	margin: 0;
-	font-size: 1.1em;
+	font-size: 1em;
 }
 .field-item-js a {
 	font-size: 1em;
@@ -131,6 +134,9 @@ Group Card CSS START
 .sortable-item {
   padding: 10px;
 	background-color: white;
+	font-size: 1em;
+}
+.sortable-item textarea {
 	font-size: 1em;
 }
 .sortable-item:first-child {
@@ -171,6 +177,10 @@ Group Card CSS START
 }
 .sortable-handle:hover .sort-delete {
 	opacity: 1;
+}
+
+.field-item-js {
+		word-break: break-all;
 }
 /*END Drag-Drop List CSS */
 
