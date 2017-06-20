@@ -46,17 +46,8 @@ class MainDisplay extends React.Component {
 					/>
 				</nav>
 				<main className="content-body">
-						<h2>	{selectedApplication ? selectedApplication + ' Groups' : 'Select an Application'  }</h2>
-						{selectedApplication ?
-							<a
-                onClick={() => this.props.addGroup(createEmptyGroupObj(selectedApplication, this.props.user))}
-                className="button primary"
-              >
-              Add New Group
-              </a>
-							:
-							null
-						}
+						{selectedApplication ? null : <h2>Select an Application</h2>  }
+
 						<Route path="/app/:appName" component={GroupCreator} />
 				</main>
 			</div>

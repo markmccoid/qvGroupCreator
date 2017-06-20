@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import uuid from 'uuid'
-import { Select } from 'antd';
+import { Select, Button } from 'antd';
 const Option = Select.Option;
 
 //Used for regular input and textarea input needs
@@ -124,7 +124,7 @@ class FieldItem extends React.Component {
 							ref="select"
 						  labelInValue
 						  value={{key: this.state.fieldValue}}
-						  style= {{width: "200px"}}
+						  style= {{width: "100%"}}
 						  notFoundContent=""
 						  defaultActiveFirstOption={false}
 						  showArrow={!this.props.allowPickListSearch}
@@ -136,15 +136,15 @@ class FieldItem extends React.Component {
 						>
 			        {options}
 			      </Select>
-			      <a
+			      <Button
 			        onMouseDown={() => {
 									this.handleSave();
 			          }
 							}
-			      >Save</a>
-						<a onClick={this.cancelEditing}>
+			      >Save</Button>
+					<Button onClick={this.cancelEditing}>
 							Cancel
-						</a>
+						</Button>
 		      </div>
 				}
 	    } else {
@@ -162,15 +162,15 @@ class FieldItem extends React.Component {
 						onBlur={this.cancelEditing}
 						inputType={this.props.inputType}
 					/>
-					<a
+					<Button
 						onMouseDown={() => {
 								this.handleSave();
 							}
 						}
-					>Save</a>
-					<a onClick={this.cancelEditing}>
+					>Save</Button>
+				<Button onClick={this.cancelEditing}>
 						Cancel
-					</a>
+					</Button>
 				</div>
 			}
 		}

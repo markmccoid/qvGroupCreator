@@ -45,7 +45,9 @@ Group Card CSS START
 	border-top-left-radius: $border-radius;
 	border-top-right-radius: $border-radius;
 }
-
+.gc-title input {
+	margin-bottom: 0;
+}
 
 
 .gc-detail-container {

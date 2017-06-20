@@ -10,6 +10,7 @@ import { startLoadGroups,
 				 startUpdateGroupFields,
 				 startUpdateGroup,
 				 setSelectedApplication,
+				 startAddGroup,
 				 startDeleteGroup
 			 } from '../actions';
 
@@ -57,8 +58,10 @@ class GroupCreator extends React.Component {
 					analytixFields={analytixFieldsFormatted}
 					onUpdateGroupFields={this.props.startUpdateGroupFields}
 					onUpdateGroup={this.props.startUpdateGroup}
+					onAddGroup={this.props.startAddGroup}
 					onDeleteGroup={this.props.deleteGroup}
 					user={this.props.user}
+					selectedApplication={currentApplication}
 				/>
 
 		);
@@ -75,9 +78,6 @@ const mapStateToProps = (state) => {
 }
 
 //#--PropTypes---###//
-GroupCreator.propTypes = {
-	selectedApplication: PropTypes.string
-};
 
 export default withRouter(connect(mapStateToProps, {
 	startLoadGroups: startLoadGroups,
@@ -86,5 +86,6 @@ export default withRouter(connect(mapStateToProps, {
 	startUpdateGroupFields: startUpdateGroupFields,
 	startUpdateGroup: startUpdateGroup,
 	setSelectedApplication: setSelectedApplication,
+	startAddGroup: startAddGroup,
 	deleteGroup: startDeleteGroup
 })(GroupCreator));
